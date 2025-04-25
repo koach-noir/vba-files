@@ -191,12 +191,14 @@ Private Sub AddIndividualButtons(bar As CommandBar)
             .Style = msoButtonIconAndCaption
             ' ショートカットキーを割り当てる（表示名は_EUMを省く）
             .Caption = AssignShortcutKey(GetDisplayName(macroName))
+            ' .Picture = LoadPicture(ThisWorkbook.Path & "\vba-files\Module\Icons\" & macroName & ".ico")
             .OnAction = macroName
             ' 大きめのボタンにする
             .Height = 40
             .Width = 100
             ' 標準アイコンの設定（必要に応じて調整）
-            .FaceId = 100 + i ' 連番でアイコンを設定（適宜調整）
+            ' .FaceId = 100 + i ' 連番でアイコンを設定（適宜調整）
+            .FaceId = 1
             .BeginGroup = (i = 1) ' 最初のボタンの前に区切り線を追加
         End With
     Next i
@@ -268,13 +270,13 @@ Private Sub AddDropdownList(bar As CommandBar, caption As String, menuItems As C
     ' 実行ボタンの作成
     Dim btn As CommandBarButton
     Set btn = bar.Controls.Add(Type:=msoControlButton)
-    
+
     With btn
         .Style = msoButtonIconAndCaption
         ' ショートカットキーを割り当てる
-        .Caption = AssignShortcutKey("実行")
+        .Caption = AssignShortcutKey(" ")
         .OnAction = "ExecuteSelectedMacro"
-        .FaceId = 293 ' 実行アイコン（必要に応じて調整）
+        .FaceId = 156
         .Tag = mapTag
     End With
 End Sub
