@@ -26,6 +26,9 @@ Private dropdownList1 As Collection
 Private dropdownList2 As Collection
 Private dropdownList3 As Collection
 
+' マクロ名を保存するためのコレクション（キー=表示名, 値=マクロ名）
+Private displayToMacroMap As Object
+
 ' ショートカットキーのリスト
 Private shortcutKeysList() As String
 Private currentShortcutKeyIndex As Integer
@@ -38,6 +41,9 @@ Sub InitializeModule()
     Set dropdownList1 = New Collection
     Set dropdownList2 = New Collection
     Set dropdownList3 = New Collection
+    
+    ' マクロ名マッピングの初期化
+    Set displayToMacroMap = CreateObject("Scripting.Dictionary")
     
     ' ショートカットキーの初期化
     shortcutKeysList = Split("Q,W,E,R,T,Y,U,I,O,A,S,D,F,G,H,J,K,L", ",")
@@ -207,11 +213,20 @@ Private Sub AddDropdownList(bar As CommandBar, caption As String, menuItems As C
         ' コレクションからメニュー項目を追加
         Dim i As Integer
         Dim macroName As String
+        Dim displayName As String
+        
+        ' マップのクリア
+        displayToMacroMap.RemoveAll
+        
         For i = 1 To menuItems.Count
             macroName = menuItems(i)
-            ' 表示名は_EUMを省くが、値（実行時のマクロ名）は元のまま
-            .AddItem GetDisplayName(macroName)
-            .List(.ListCount - 1, 1) = macroName
+            displayName = GetDisplayName(macroName)
+            
+            ' 表示名と実際のマクロ名のマッピングを保存
+            displayToMacroMap(displayName) = macroName
+            
+            ' 表示名のみを追加
+            .AddItem displayName
         Next i
         
         .Width = 200  ' ドロップダウンの幅を設定
@@ -248,15 +263,18 @@ Sub ExecuteSelectedMacro()
     
     If Not ctrl Is Nothing Then
         If ctrl.Text <> "" Then
-            ' ドロップダウンリストの2列目（非表示）に格納された完全なマクロ名を取得
-            Dim macroName As String
-            macroName = ctrl.List(ctrl.ListIndex - 1, 1)
+            ' ドロップダウンリストの選択項目のテキスト（表示名）を取得
+            Dim displayName As String
+            displayName = ctrl.Text
             
-            If macroName <> "" Then
+            ' 対応するマクロ名を取得
+            Dim macroName As String
+            If displayToMacroMap.Exists(displayName) Then
+                macroName = displayToMacroMap(displayName)
                 Application.Run macroName
             Else
-                ' 2列目のデータがない場合は表示されているテキストを使用（後方互換性）
-                Application.Run ctrl.Text
+                ' マッピングがない場合は表示名をそのまま使用（後方互換性）
+                Application.Run displayName
             End If
         Else
             MsgBox "マクロが選択されていません。", vbExclamation
