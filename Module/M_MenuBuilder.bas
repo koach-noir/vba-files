@@ -3,7 +3,7 @@ Option Explicit
 
 ' メニュー名の定数
 Const CUSTOM_MENU_NAME As String = "EUMControlsMenu"
-Const SETTINGS_FILE_PATH As String = "EUMMenuSettings.txt"
+Const SETTINGS_FILE_PATH As String = "vba-files\Module\EUMMenuSettings.txt"
 
 ' セクション名の定数
 Const SECTION_INDIVIDUAL_BUTTONS As String = "[IndividualButtons]"
