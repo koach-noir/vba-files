@@ -11,6 +11,9 @@ Const SECTION_DROPDOWN_1 As String = "[DropDownList&Buttons1]"
 Const SECTION_DROPDOWN_2 As String = "[DropDownList&Buttons2]"
 Const SECTION_DROPDOWN_3 As String = "[DropDownList&Buttons3]"
 
+' EUMサフィックス
+Const EUM_SUFFIX As String = "_EUM"
+
 ' ターゲットとするモジュール名のリスト
 Private TargetModules As Variant
 
@@ -55,6 +58,16 @@ Function AssignShortcutKey(caption As String) As String
     Else
         ' ショートカットキーが足りない場合はそのまま返す
         AssignShortcutKey = caption
+    End If
+End Function
+
+' マクロ名から表示用の名前を取得する関数
+Function GetDisplayName(macroName As String) As String
+    ' マクロ名の末尾に_EUMがある場合は省く
+    If Right(macroName, Len(EUM_SUFFIX)) = EUM_SUFFIX Then
+        GetDisplayName = Left(macroName, Len(macroName) - Len(EUM_SUFFIX))
+    Else
+        GetDisplayName = macroName
     End If
 End Function
 
@@ -154,16 +167,19 @@ End Sub
 Private Sub AddIndividualButtons(bar As CommandBar)
     Dim i As Integer
     Dim btn As CommandBarButton
+    Dim macroName As String
     
     ' 個別ボタンの追加
     For i = 1 To individualButtons.Count
         Set btn = bar.Controls.Add(Type:=msoControlButton)
         
+        macroName = individualButtons(i)
+        
         With btn
             .Style = msoButtonIconAndCaption
-            ' ショートカットキーを割り当てる
-            .Caption = AssignShortcutKey(individualButtons(i))
-            .OnAction = individualButtons(i)
+            ' ショートカットキーを割り当てる（表示名は_EUMを省く）
+            .Caption = AssignShortcutKey(GetDisplayName(macroName))
+            .OnAction = macroName
             ' 大きめのボタンにする
             .Height = 40
             .Width = 100
@@ -190,8 +206,12 @@ Private Sub AddDropdownList(bar As CommandBar, caption As String, menuItems As C
         
         ' コレクションからメニュー項目を追加
         Dim i As Integer
+        Dim macroName As String
         For i = 1 To menuItems.Count
-            .AddItem menuItems(i)
+            macroName = menuItems(i)
+            ' 表示名は_EUMを省くが、値（実行時のマクロ名）は元のまま
+            .AddItem GetDisplayName(macroName)
+            .List(.ListCount - 1, 1) = macroName
         Next i
         
         .Width = 200  ' ドロップダウンの幅を設定
@@ -228,7 +248,16 @@ Sub ExecuteSelectedMacro()
     
     If Not ctrl Is Nothing Then
         If ctrl.Text <> "" Then
-            Application.Run ctrl.Text
+            ' ドロップダウンリストの2列目（非表示）に格納された完全なマクロ名を取得
+            Dim macroName As String
+            macroName = ctrl.List(ctrl.ListIndex - 1, 1)
+            
+            If macroName <> "" Then
+                Application.Run macroName
+            Else
+                ' 2列目のデータがない場合は表示されているテキストを使用（後方互換性）
+                Application.Run ctrl.Text
+            End If
         Else
             MsgBox "マクロが選択されていません。", vbExclamation
         End If
