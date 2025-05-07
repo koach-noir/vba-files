@@ -7,79 +7,79 @@ Attribute VB_Exposed = False
 Option Explicit
 
 ' ===================================================
-' ãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥V2 - ã‚­ãƒ¥ãƒ¼ç®¡ç†ã‚¯ãƒ©ã‚¹
+' ƒg[ƒXƒg’Ê’mV2 - ƒLƒ…[ŠÇ—ƒNƒ‰ƒX
 ' ===================================================
-' ä½œæˆæ—¥: 2025/04/25
-' ä½œæˆè€…: Claude
-' æ¦‚è¦: æ”¹è‰¯ç‰ˆãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ã‚’ç®¡ç†ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
-' æ©Ÿèƒ½:
-'   - è¤‡æ•°ã®ãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ã‚’ã‚­ãƒ¥ãƒ¼ç®¡ç†
-'   - é€šçŸ¥ã®ç¨®é¡ï¼ˆæƒ…å ±/æˆåŠŸ/è­¦å‘Š/ã‚¨ãƒ©ãƒ¼ï¼‰ã‚’ã‚µãƒãƒ¼ãƒˆ
-'   - è¡¨ç¤ºæ™‚é–“ã®ã‚«ã‚¹ã‚¿ãƒã‚¤ã‚º
-'   - ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åŠ¹æœã®æ”¹è‰¯
+' ì¬“ú: 2025/04/25
+' ì¬Ò: Claude
+' ŠT—v: ‰ü—Ç”Åƒg[ƒXƒg’Ê’m‚ğŠÇ—‚·‚é‚½‚ß‚ÌƒNƒ‰ƒXƒ‚ƒWƒ…[ƒ‹
+' ‹@”\:
+'   - •¡”‚Ìƒg[ƒXƒg’Ê’m‚ğƒLƒ…[ŠÇ—
+'   - ’Ê’m‚Ìí—Şiî•ñ/¬Œ÷/Œx/ƒGƒ‰[j‚ğƒTƒ|[ƒg
+'   - •\¦ŠÔ‚ÌƒJƒXƒ^ƒ}ƒCƒY
+'   - ƒAƒjƒ[ƒVƒ‡ƒ“Œø‰Ê‚Ì‰ü—Ç
 ' ===================================================
 
-' ãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ã™å‹å®šç¾©
+' ƒg[ƒXƒg’Ê’mƒAƒCƒeƒ€‚ğ•\‚·Œ^’è‹`
 Private Type ToastQueueItem
-    Message As String        ' è¡¨ç¤ºã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
-    ToastType As String      ' é€šçŸ¥ã®ç¨®é¡ï¼ˆ"info", "success", "warning", "error"ï¼‰
-    Duration As Integer      ' è¡¨ç¤ºæ™‚é–“ï¼ˆãƒŸãƒªç§’ï¼‰
-    IconType As String       ' ã‚¢ã‚¤ã‚³ãƒ³ã‚¿ã‚¤ãƒ—ï¼ˆã‚ªãƒ—ã‚·ãƒ§ãƒ³ï¼‰
+    Message As String        ' •\¦‚·‚éƒƒbƒZ[ƒW
+    ToastType As String      ' ’Ê’m‚Ìí—Şi"info", "success", "warning", "error"j
+    Duration As Integer      ' •\¦ŠÔiƒ~ƒŠ•bj
+    IconType As String       ' ƒAƒCƒRƒ“ƒ^ƒCƒviƒIƒvƒVƒ‡ƒ“j
 End Type
 
-' ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆå¤‰æ•°
-Private toastQueue() As ToastQueueItem   ' ãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ã‚­ãƒ¥ãƒ¼
-Private queueCount As Integer            ' ã‚­ãƒ¥ãƒ¼å†…ã®ã‚¢ã‚¤ãƒ†ãƒ æ•°
-Private isProcessing As Boolean          ' å‡¦ç†ä¸­ãƒ•ãƒ©ã‚°
-Private activeToast As Object            ' ç¾åœ¨è¡¨ç¤ºä¸­ã®ãƒˆãƒ¼ã‚¹ãƒˆ
+' ƒvƒ‰ƒCƒx[ƒg•Ï”
+Private toastQueue() As ToastQueueItem   ' ƒg[ƒXƒg’Ê’mƒLƒ…[
+Private queueCount As Integer            ' ƒLƒ…[“à‚ÌƒAƒCƒeƒ€”
+Private isProcessing As Boolean          ' ˆ—’†ƒtƒ‰ƒO
+Private activeToast As Object            ' Œ»İ•\¦’†‚Ìƒg[ƒXƒg
 
-' å®šæ•°
-Private Const DEFAULT_DURATION As Integer = 2000    ' ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè¡¨ç¤ºæ™‚é–“ï¼ˆãƒŸãƒªç§’ï¼‰
-Private Const MAX_QUEUE_SIZE As Integer = 10        ' æœ€å¤§ã‚­ãƒ¥ãƒ¼ã‚µã‚¤ã‚º
+' ’è”
+Private Const DEFAULT_DURATION As Integer = 2000    ' ƒfƒtƒHƒ‹ƒg•\¦ŠÔiƒ~ƒŠ•bj
+Private Const MAX_QUEUE_SIZE As Integer = 10        ' Å‘åƒLƒ…[ƒTƒCƒY
 
 ' ===================================================
-' åˆæœŸåŒ–å‡¦ç†
+' ‰Šú‰»ˆ—
 ' ===================================================
 Private Sub Class_Initialize()
-    ' ã‚­ãƒ¥ãƒ¼ã®åˆæœŸåŒ–
+    ' ƒLƒ…[‚Ì‰Šú‰»
     ReDim toastQueue(0 To MAX_QUEUE_SIZE - 1)
     queueCount = 0
     isProcessing = False
 End Sub
 
 ' ===================================================
-' å…¬é–‹ãƒ¡ã‚½ãƒƒãƒ‰
+' ŒöŠJƒƒ\ƒbƒh
 ' ===================================================
 
-' ãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ã®è¡¨ç¤ºï¼ˆãƒ¡ã‚¤ãƒ³é–¢æ•°ï¼‰
+' ƒg[ƒXƒg’Ê’m‚Ì•\¦iƒƒCƒ“ŠÖ”j
 Public Sub ShowToast(Message As String, Optional ToastType As String = "info", _
                     Optional Duration As Integer = 0, Optional IconType As String = "")
-    ' å¼•æ•°ã®æ¤œè¨¼ã¨ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã®è¨­å®š
+    ' ˆø”‚ÌŒŸØ‚ÆƒfƒtƒHƒ‹ƒg’l‚Ìİ’è
     If Len(Trim(Message)) = 0 Then Exit Sub
     
     If Duration <= 0 Then Duration = DEFAULT_DURATION
     
-    ' ãƒˆãƒ¼ã‚¹ãƒˆã‚¿ã‚¤ãƒ—ã®æ¤œè¨¼
+    ' ƒg[ƒXƒgƒ^ƒCƒv‚ÌŒŸØ
     ToastType = ValidateToastType(ToastType)
     
-    ' ã‚­ãƒ¥ãƒ¼ã«è¿½åŠ 
+    ' ƒLƒ…[‚É’Ç‰Á
     AddToQueue Message, ToastType, Duration, IconType
     
-    ' ã‚­ãƒ¥ãƒ¼å‡¦ç†ãŒå®Ÿè¡Œä¸­ã§ãªã‘ã‚Œã°é–‹å§‹
+    ' ƒLƒ…[ˆ—‚ªÀs’†‚Å‚È‚¯‚ê‚ÎŠJn
     If Not isProcessing Then
         ProcessQueue
     End If
 End Sub
 
 ' ===================================================
-' ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆãƒ¡ã‚½ãƒƒãƒ‰
+' ƒvƒ‰ƒCƒx[ƒgƒƒ\ƒbƒh
 ' ===================================================
 
-' ã‚­ãƒ¥ãƒ¼ã«é€šçŸ¥ã‚’è¿½åŠ 
+' ƒLƒ…[‚É’Ê’m‚ğ’Ç‰Á
 Private Sub AddToQueue(Message As String, ToastType As String, Duration As Integer, IconType As String)
-    ' ã‚­ãƒ¥ãƒ¼ãŒã„ã£ã±ã„ãªã‚‰å¤ã„ã‚‚ã®ã‚’å‰Šé™¤
+    ' ƒLƒ…[‚ª‚¢‚Á‚Ï‚¢‚È‚çŒÃ‚¢‚à‚Ì‚ğíœ
     If queueCount >= MAX_QUEUE_SIZE Then
-        ' ã‚­ãƒ¥ãƒ¼ã‚’å‰ã«è©°ã‚ã‚‹
+        ' ƒLƒ…[‚ğ‘O‚É‹l‚ß‚é
         Dim i As Integer
         For i = 0 To MAX_QUEUE_SIZE - 2
             toastQueue(i) = toastQueue(i + 1)
@@ -87,7 +87,7 @@ Private Sub AddToQueue(Message As String, ToastType As String, Duration As Integ
         queueCount = MAX_QUEUE_SIZE - 1
     End If
     
-    ' ã‚­ãƒ¥ãƒ¼ã«è¿½åŠ 
+    ' ƒLƒ…[‚É’Ç‰Á
     With toastQueue(queueCount)
         .Message = Message
         .ToastType = ToastType
@@ -98,7 +98,7 @@ Private Sub AddToQueue(Message As String, ToastType As String, Duration As Integ
     queueCount = queueCount + 1
 End Sub
 
-' ã‚­ãƒ¥ãƒ¼ã‚’å‡¦ç†
+' ƒLƒ…[‚ğˆ—
 Private Sub ProcessQueue()
     If queueCount <= 0 Then
         isProcessing = False
@@ -107,7 +107,7 @@ Private Sub ProcessQueue()
     
     isProcessing = True
     
-    ' æœ€åˆã®ãƒˆãƒ¼ã‚¹ãƒˆã‚’è¡¨ç¤º
+    ' Å‰‚Ìƒg[ƒXƒg‚ğ•\¦
     Dim toast As Object
     Set toast = New ToastVer2
     Set activeToast = toast
@@ -120,60 +120,60 @@ Private Sub ProcessQueue()
         .Show vbModeless
     End With
     
-    ' ã‚­ãƒ¥ãƒ¼ã‚’å‰ã«è©°ã‚ã‚‹
+    ' ƒLƒ…[‚ğ‘O‚É‹l‚ß‚é
     Dim i As Integer
     For i = 0 To queueCount - 2
         toastQueue(i) = toastQueue(i + 1)
     Next i
     queueCount = queueCount - 1
     
-    ' å®Œäº†å¾Œã«æ¬¡ã®å‡¦ç†ã‚’è¡Œã†ã‚¿ã‚¤ãƒãƒ¼ã‚’ã‚»ãƒƒãƒˆ
-    ' è¡¨ç¤ºæ™‚é–“ + ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æ™‚é–“(ç´„500ms)ã‚’è€ƒæ…®
+    ' Š®—¹Œã‚ÉŸ‚Ìˆ—‚ğs‚¤ƒ^ƒCƒ}[‚ğƒZƒbƒg
+    ' •\¦ŠÔ + ƒAƒjƒ[ƒVƒ‡ƒ“ŠÔ(–ñ500ms)‚ğl—¶
     Application.OnTime Now + TimeSerial(0, 0, (toastQueue(0).Duration + 500) / 1000), "ContinueToastQueue"
 End Sub
 
-' æ¬¡ã®ãƒˆãƒ¼ã‚¹ãƒˆã‚’å‡¦ç†ï¼ˆApplication.OnTimeã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ï¼‰
+' Ÿ‚Ìƒg[ƒXƒg‚ğˆ—iApplication.OnTime‚©‚çŒÄ‚Ño‚³‚ê‚éj
 Public Sub ContinueToastQueue()
     Set activeToast = Nothing
     ProcessQueue
 End Sub
 
-' ç¾åœ¨è¡¨ç¤ºä¸­ã®ãƒˆãƒ¼ã‚¹ãƒˆã‚’é–‰ã˜ã‚‹
+' Œ»İ•\¦’†‚Ìƒg[ƒXƒg‚ğ•Â‚¶‚é
 Public Sub CloseCurrentToast()
     If Not activeToast Is Nothing Then
         activeToast.Hide
         Set activeToast = Nothing
     End If
     
-    ' æ¬¡ã®ãƒˆãƒ¼ã‚¹ãƒˆã‚’å‡¦ç†
+    ' Ÿ‚Ìƒg[ƒXƒg‚ğˆ—
     Application.OnTime Now, "ContinueToastQueue"
 End Sub
 
-' ãƒˆãƒ¼ã‚¹ãƒˆã‚¿ã‚¤ãƒ—ã‚’æ¤œè¨¼ã—ã€æœ‰åŠ¹ãªå€¤ã‚’è¿”ã™
+' ƒg[ƒXƒgƒ^ƒCƒv‚ğŒŸØ‚µA—LŒø‚È’l‚ğ•Ô‚·
 Private Function ValidateToastType(ToastType As String) As String
     Select Case LCase(ToastType)
         Case "info", "success", "warning", "error"
             ValidateToastType = LCase(ToastType)
         Case Else
-            ValidateToastType = "info"  ' ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯ "info"
+            ValidateToastType = "info"  ' ƒfƒtƒHƒ‹ƒg‚Í "info"
     End Select
 End Function
 
 ' ===================================================
-' ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£é–¢æ•°
+' ƒ†[ƒeƒBƒŠƒeƒBŠÖ”
 ' ===================================================
 
-' ç¾åœ¨ã®ã‚­ãƒ¥ãƒ¼å†…ã‚¢ã‚¤ãƒ†ãƒ æ•°ã‚’å–å¾—
+' Œ»İ‚ÌƒLƒ…[“àƒAƒCƒeƒ€”‚ğæ“¾
 Public Property Get QueueSize() As Integer
     QueueSize = queueCount
 End Property
 
-' å‡¦ç†ä¸­ãƒ•ãƒ©ã‚°ã‚’å–å¾—
+' ˆ—’†ƒtƒ‰ƒO‚ğæ“¾
 Public Property Get IsProcessing() As Boolean
     IsProcessing = isProcessing
 End Property
 
-' ã‚­ãƒ¥ãƒ¼ã‚’ã‚¯ãƒªã‚¢
+' ƒLƒ…[‚ğƒNƒŠƒA
 Public Sub ClearQueue()
     queueCount = 0
     If Not activeToast Is Nothing Then

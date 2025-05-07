@@ -1,0 +1,4 @@
+*.bas encoding=sjis
+*.cls encoding=sjis
+*.frm encoding=sjis
+*.frx -text

@@ -2,80 +2,80 @@ Attribute VB_Name = "M_ToastVer2"
 Option Explicit
 
 ' ===================================================
-' ãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥V2 - ãƒ˜ãƒ«ãƒ‘ãƒ¼ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
+' ƒg[ƒXƒg’Ê’mV2 - ƒwƒ‹ƒp[ƒ‚ƒWƒ…[ƒ‹
 ' ===================================================
-' ä½œæˆæ—¥: 2025/04/25
-' ä½œæˆè€…: Claude
-' æ¦‚è¦: æ”¹è‰¯ç‰ˆãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ã®ãƒ˜ãƒ«ãƒ‘ãƒ¼é–¢æ•°ã‚’æä¾›ã™ã‚‹ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
-' æ©Ÿèƒ½:
-'   - ç°¡æ˜“å‘¼ã³å‡ºã—ç”¨ã®ãƒ˜ãƒ«ãƒ‘ãƒ¼é–¢æ•°
-'   - APIé–¢é€£ã®å®£è¨€
-'   - æ‹¡å¼µã‚¤ãƒ¼ã‚¸ãƒ³ã‚°é–¢æ•°
-'   - ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£é–¢æ•°
+' ì¬“ú: 2025/04/25
+' ì¬Ò: Claude
+' ŠT—v: ‰ü—Ç”Åƒg[ƒXƒg’Ê’m‚Ìƒwƒ‹ƒp[ŠÖ”‚ğ’ñ‹Ÿ‚·‚éƒ‚ƒWƒ…[ƒ‹
+' ‹@”\:
+'   - ŠÈˆÕŒÄ‚Ño‚µ—p‚Ìƒwƒ‹ƒp[ŠÖ”
+'   - APIŠÖ˜A‚ÌéŒ¾
+'   - Šg’£ƒC[ƒWƒ“ƒOŠÖ”
+'   - ƒ†[ƒeƒBƒŠƒeƒBŠÖ”
 ' ===================================================
 
-' Windows APIå®£è¨€
+' Windows APIéŒ¾
 #If VBA7 Then
-    ' 64ãƒ“ãƒƒãƒˆ Officeç”¨
+    ' 64ƒrƒbƒg Office—p
     Public Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As LongPtr)
 #Else
-    ' 32ãƒ“ãƒƒãƒˆ Officeç”¨
+    ' 32ƒrƒbƒg Office—p
     Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 #End If
 
 ' ===================================================
-' å…¬é–‹ãƒ˜ãƒ«ãƒ‘ãƒ¼é–¢æ•°
+' ŒöŠJƒwƒ‹ƒp[ŠÖ”
 ' ===================================================
 
-' åŸºæœ¬çš„ãªãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ã‚’è¡¨ç¤ºï¼ˆç°¡æ˜“ãƒãƒ¼ã‚¸ãƒ§ãƒ³ï¼‰
+' Šî–{“I‚Èƒg[ƒXƒg’Ê’m‚ğ•\¦iŠÈˆÕƒo[ƒWƒ‡ƒ“j
 Public Sub ShowToastVer2(Message As String, Optional ToastType As String = "info", _
                        Optional Duration As Integer = 0, Optional IconType As String = "")
     ToastManagerVer2.ShowToast Message, ToastType, Duration, IconType
 End Sub
 
-' æƒ…å ±ãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ï¼ˆé’è‰²ï¼‰
+' î•ñƒg[ƒXƒg’Ê’miÂFj
 Public Sub ShowInfoToast(Message As String, Optional Duration As Integer = 0)
     ToastManagerVer2.ShowToast Message, "info", Duration, "info"
 End Sub
 
-' æˆåŠŸãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ï¼ˆç·‘è‰²ï¼‰
+' ¬Œ÷ƒg[ƒXƒg’Ê’mi—ÎFj
 Public Sub ShowSuccessToast(Message As String, Optional Duration As Integer = 0)
     ToastManagerVer2.ShowToast Message, "success", Duration, "success"
 End Sub
 
-' è­¦å‘Šãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ï¼ˆã‚ªãƒ¬ãƒ³ã‚¸è‰²ï¼‰
+' Œxƒg[ƒXƒg’Ê’miƒIƒŒƒ“ƒWFj
 Public Sub ShowWarningToast(Message As String, Optional Duration As Integer = 0)
     ToastManagerVer2.ShowToast Message, "warning", Duration, "warning"
 End Sub
 
-' ã‚¨ãƒ©ãƒ¼ãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ï¼ˆèµ¤è‰²ï¼‰
+' ƒGƒ‰[ƒg[ƒXƒg’Ê’miÔFj
 Public Sub ShowErrorToast(Message As String, Optional Duration As Integer = 0)
     ToastManagerVer2.ShowToast Message, "error", Duration, "error"
 End Sub
 
 ' ===================================================
-' æ‹¡å¼µã‚¤ãƒ¼ã‚¸ãƒ³ã‚°é–¢æ•°
+' Šg’£ƒC[ƒWƒ“ƒOŠÖ”
 ' ===================================================
 
-' æ§˜ã€…ãªã‚¤ãƒ¼ã‚¸ãƒ³ã‚°é–¢æ•°ã‚’æä¾›ï¼ˆã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å‹•ãã‚’ã‚«ã‚¹ã‚¿ãƒã‚¤ã‚ºã™ã‚‹ãŸã‚ï¼‰
-' t: 0.0ï½1.0ã®å€¤ï¼ˆé€²è¡Œåº¦ï¼‰
+' —lX‚ÈƒC[ƒWƒ“ƒOŠÖ”‚ğ’ñ‹ŸiƒAƒjƒ[ƒVƒ‡ƒ“‚Ì“®‚«‚ğƒJƒXƒ^ƒ}ƒCƒY‚·‚é‚½‚ßj
+' t: 0.0`1.0‚Ì’liis“xj
 
-' ç·šå½¢ï¼ˆä¸€å®šé€Ÿåº¦ï¼‰
+' üŒ`iˆê’è‘¬“xj
 Public Function LinearEasing(t As Double) As Double
     LinearEasing = t
 End Function
 
-' äºŒæ¬¡é–¢æ•°ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã‚¤ãƒ³ï¼ˆåŠ é€Ÿï¼‰
+' “ñŸŠÖ”ƒC[ƒWƒ“ƒOƒCƒ“i‰Á‘¬j
 Public Function EaseInQuad(t As Double) As Double
     EaseInQuad = t * t
 End Function
 
-' äºŒæ¬¡é–¢æ•°ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã‚¢ã‚¦ãƒˆï¼ˆæ¸›é€Ÿï¼‰
+' “ñŸŠÖ”ƒC[ƒWƒ“ƒOƒAƒEƒgiŒ¸‘¬j
 Public Function EaseOutQuad(t As Double) As Double
     EaseOutQuad = -t * (t - 2)
 End Function
 
-' äºŒæ¬¡é–¢æ•°ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã‚¤ãƒ³ã‚¢ã‚¦ãƒˆï¼ˆåŠ é€Ÿ-æ¸›é€Ÿï¼‰
+' “ñŸŠÖ”ƒC[ƒWƒ“ƒOƒCƒ“ƒAƒEƒgi‰Á‘¬-Œ¸‘¬j
 Public Function EaseInOutQuad(t As Double) As Double
     t = t * 2
     If t < 1 Then
@@ -86,18 +86,18 @@ Public Function EaseInOutQuad(t As Double) As Double
     End If
 End Function
 
-' ä¸‰æ¬¡é–¢æ•°ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã‚¤ãƒ³ï¼ˆåŠ é€Ÿï¼‰
+' OŸŠÖ”ƒC[ƒWƒ“ƒOƒCƒ“i‰Á‘¬j
 Public Function EaseInCubic(t As Double) As Double
     EaseInCubic = t * t * t
 End Function
 
-' ä¸‰æ¬¡é–¢æ•°ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã‚¢ã‚¦ãƒˆï¼ˆæ¸›é€Ÿï¼‰
+' OŸŠÖ”ƒC[ƒWƒ“ƒOƒAƒEƒgiŒ¸‘¬j
 Public Function EaseOutCubic(t As Double) As Double
     t = t - 1
     EaseOutCubic = t * t * t + 1
 End Function
 
-' ä¸‰æ¬¡é–¢æ•°ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã‚¤ãƒ³ã‚¢ã‚¦ãƒˆï¼ˆåŠ é€Ÿ-æ¸›é€Ÿï¼‰
+' OŸŠÖ”ƒC[ƒWƒ“ƒOƒCƒ“ƒAƒEƒgi‰Á‘¬-Œ¸‘¬j
 Public Function EaseInOutCubic(t As Double) As Double
     t = t * 2
     If t < 1 Then
@@ -108,7 +108,7 @@ Public Function EaseInOutCubic(t As Double) As Double
     End If
 End Function
 
-' å¼¾æ€§ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã‚¢ã‚¦ãƒˆï¼ˆãƒã‚¦ãƒ³ãƒ‰åŠ¹æœï¼‰
+' ’e«ƒC[ƒWƒ“ƒOƒAƒEƒgiƒoƒEƒ“ƒhŒø‰Êj
 Public Function EaseOutElastic(t As Double) As Double
     Dim p As Double
     p = 0.3
@@ -129,7 +129,7 @@ Public Function EaseOutElastic(t As Double) As Double
     EaseOutElastic = 2 ^ (-10 * t) * Sin((t - s) * (2 * WorksheetFunction.Pi) / p) + 1
 End Function
 
-' ãƒã‚¦ãƒ³ã‚¹ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã‚¢ã‚¦ãƒˆï¼ˆè·³ã­è¿”ã‚ŠåŠ¹æœï¼‰
+' ƒoƒEƒ“ƒXƒC[ƒWƒ“ƒOƒAƒEƒgi’µ‚Ë•Ô‚èŒø‰Êj
 Public Function EaseOutBounce(t As Double) As Double
     If t < (1 / 2.75) Then
         EaseOutBounce = 7.5625 * t * t
@@ -146,10 +146,10 @@ Public Function EaseOutBounce(t As Double) As Double
 End Function
 
 ' ===================================================
-' ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£é–¢æ•°
+' ƒ†[ƒeƒBƒŠƒeƒBŠÖ”
 ' ===================================================
 
-' ç”»é¢ã®æ›´æ–°ã‚’ä¸€æ™‚åœæ­¢/å†é–‹ã™ã‚‹é–¢æ•°
+' ‰æ–Ê‚ÌXV‚ğˆê’â~/ÄŠJ‚·‚éŠÖ”
 Public Sub FreezeDraw(Optional freeze As Boolean = True)
     If freeze Then
         Application.ScreenUpdating = False
@@ -162,38 +162,38 @@ Public Sub FreezeDraw(Optional freeze As Boolean = True)
     End If
 End Sub
 
-' ç¾åœ¨ã®ã‚­ãƒ¥ãƒ¼å†…ãƒˆãƒ¼ã‚¹ãƒˆæ•°ã‚’å–å¾—
+' Œ»İ‚ÌƒLƒ…[“àƒg[ƒXƒg”‚ğæ“¾
 Public Function GetToastQueueSize() As Integer
     GetToastQueueSize = ToastManagerVer2.QueueSize
 End Function
 
-' ç¾åœ¨å‡¦ç†ä¸­ã‹ã©ã†ã‹ã‚’å–å¾—
+' Œ»İˆ—’†‚©‚Ç‚¤‚©‚ğæ“¾
 Public Function IsProcessingToasts() As Boolean
     IsProcessingToasts = ToastManagerVer2.IsProcessing
 End Function
 
-' ãƒˆãƒ¼ã‚¹ãƒˆã‚­ãƒ¥ãƒ¼ã‚’ã‚¯ãƒªã‚¢
+' ƒg[ƒXƒgƒLƒ…[‚ğƒNƒŠƒA
 Public Sub ClearToastQueue()
     ToastManagerVer2.ClearQueue
 End Sub
 
 ' ===================================================
-' ä½¿ç”¨ä¾‹
+' g—p—á
 ' ===================================================
-' åŸºæœ¬çš„ãªä½¿ç”¨æ–¹æ³•:
-'  ShowToastVer2 "å‡¦ç†ãŒå®Œäº†ã—ã¾ã—ãŸ", "success", 3000
+' Šî–{“I‚Èg—p•û–@:
+'  ShowToastVer2 "ˆ—‚ªŠ®—¹‚µ‚Ü‚µ‚½", "success", 3000
 '
-' å°‚ç”¨é–¢æ•°ã®ä½¿ç”¨ä¾‹:
-'  ShowSuccessToast "ä¿å­˜ã—ã¾ã—ãŸ", 3000
-'  ShowErrorToast "ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ", 5000
-'  ShowInfoToast "æƒ…å ±ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸"
-'  ShowWarningToast "æ³¨æ„ãŒå¿…è¦ã§ã™"
+' ê—pŠÖ”‚Ìg—p—á:
+'  ShowSuccessToast "•Û‘¶‚µ‚Ü‚µ‚½", 3000
+'  ShowErrorToast "ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½", 5000
+'  ShowInfoToast "î•ñƒƒbƒZ[ƒW"
+'  ShowWarningToast "’ˆÓ‚ª•K—v‚Å‚·"
 '
-' è¤‡æ•°ã®é€šçŸ¥ã‚’é€£ç¶šã—ã¦è¡¨ç¤º:
-'  ShowInfoToast "å‡¦ç†ã‚’é–‹å§‹ã—ã¾ã™"
-'  ' ä½•ã‚‰ã‹ã®å‡¦ç†
-'  ShowSuccessToast "å‡¦ç†ãŒå®Œäº†ã—ã¾ã—ãŸ"
+' •¡”‚Ì’Ê’m‚ğ˜A‘±‚µ‚Ä•\¦:
+'  ShowInfoToast "ˆ—‚ğŠJn‚µ‚Ü‚·"
+'  ' ‰½‚ç‚©‚Ìˆ—
+'  ShowSuccessToast "ˆ—‚ªŠ®—¹‚µ‚Ü‚µ‚½"
 '
-' ã‚­ãƒ¥ãƒ¼ã®ã‚¯ãƒªã‚¢:
+' ƒLƒ…[‚ÌƒNƒŠƒA:
 '  ClearToastQueue
 ' ===================================================

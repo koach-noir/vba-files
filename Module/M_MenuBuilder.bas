@@ -1,81 +1,81 @@
 Attribute VB_Name = "M_MenuBuilder"
 Option Explicit
 
-' ãƒ¡ãƒ‹ãƒ¥ãƒ¼åã®å®šæ•°
+' ƒƒjƒ…[–¼‚Ì’è”
 Const CUSTOM_MENU_NAME As String = "EUMControlsMenu"
 Const SETTINGS_FILE_PATH As String = "vba-files\Module\EUMMenuSettings.txt"
 
-' ã‚»ã‚¯ã‚·ãƒ§ãƒ³åã®å®šæ•°
+' ƒZƒNƒVƒ‡ƒ“–¼‚Ì’è”
 Const SECTION_INDIVIDUAL_BUTTONS As String = "[IndividualButtons]"
 Const SECTION_DROPDOWN_1 As String = "[DropDownList&Buttons1]"
 Const SECTION_DROPDOWN_2 As String = "[DropDownList&Buttons2]"
 Const SECTION_DROPDOWN_3 As String = "[DropDownList&Buttons3]"
 
-' EUMã‚µãƒ•ã‚£ãƒƒã‚¯ã‚¹
+' EUMƒTƒtƒBƒbƒNƒX
 Const EUM_SUFFIX As String = "_EUM"
 
-' ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¨ã™ã‚‹ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åã®ãƒªã‚¹ãƒˆ
+' ƒ^[ƒQƒbƒg‚Æ‚·‚éƒ‚ƒWƒ…[ƒ‹–¼‚ÌƒŠƒXƒg
 Private TargetModules As Variant
 
-' ä¸€æ„ã®IDç”Ÿæˆç”¨ã®å¤‰æ•°
+' ˆêˆÓ‚ÌID¶¬—p‚Ì•Ï”
 Private controlIdCounter As Long
 
-' ãƒ¡ãƒ‹ãƒ¥ãƒ¼æ§‹æˆç”¨ã®ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
+' ƒƒjƒ…[\¬—p‚ÌƒRƒŒƒNƒVƒ‡ƒ“
 Private individualButtons As Collection
 Private dropdownList1 As Collection
 Private dropdownList2 As Collection
 Private dropdownList3 As Collection
 
-' ãƒã‚¯ãƒ­åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ï¼ˆã‚­ãƒ¼=è¡¨ç¤ºå, å€¤=ãƒã‚¯ãƒ­åï¼‰
+' ƒ}ƒNƒ–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒRƒŒƒNƒVƒ‡ƒ“iƒL[=•\¦–¼, ’l=ƒ}ƒNƒ–¼j
 Private displayToMacroMap1 As Object
 Private displayToMacroMap2 As Object
 Private displayToMacroMap3 As Object
 Private displayToMacroMap As Object
 
-' ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼ã®ãƒªã‚¹ãƒˆ
+' ƒVƒ‡[ƒgƒJƒbƒgƒL[‚ÌƒŠƒXƒg
 Private shortcutKeysList() As String
 Private currentShortcutKeyIndex As Integer
 
 Sub InitializeModule()
-    TargetModules = Array("M_Macros") ' å¿…è¦ã«å¿œã˜ã¦å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’è¿½åŠ 
+    TargetModules = Array("M_Macros") ' •K—v‚É‰‚¶‚Ä‘ÎÛƒ‚ƒWƒ…[ƒ‹‚ğ’Ç‰Á
     
-    ' å„ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã®åˆæœŸåŒ–
+    ' ŠeƒRƒŒƒNƒVƒ‡ƒ“‚Ì‰Šú‰»
     Set individualButtons = New Collection
     Set dropdownList1 = New Collection
     Set dropdownList2 = New Collection
     Set dropdownList3 = New Collection
     
-    ' ãƒã‚¯ãƒ­åãƒãƒƒãƒ”ãƒ³ã‚°ã®åˆæœŸåŒ–
+    ' ƒ}ƒNƒ–¼ƒ}ƒbƒsƒ“ƒO‚Ì‰Šú‰»
     Set displayToMacroMap1 = CreateObject("Scripting.Dictionary")
     Set displayToMacroMap2 = CreateObject("Scripting.Dictionary")
     Set displayToMacroMap3 = CreateObject("Scripting.Dictionary")
-    Set displayToMacroMap = CreateObject("Scripting.Dictionary") ' å¾Œæ–¹äº’æ›æ€§ã®ãŸã‚
+    Set displayToMacroMap = CreateObject("Scripting.Dictionary") ' Œã•ûŒİŠ·«‚Ì‚½‚ß
     
-    ' ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼ã®åˆæœŸåŒ–
+    ' ƒVƒ‡[ƒgƒJƒbƒgƒL[‚Ì‰Šú‰»
     shortcutKeysList = Split("Q,W,E,R,T,Y,U,I,O,A,S,D,F,G,H,J,K,L", ",")
     currentShortcutKeyIndex = 0
     
-    ' è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ã‚’èª­ã¿è¾¼ã‚€
+    ' İ’èƒtƒ@ƒCƒ‹‚©‚çƒƒjƒ…[€–Ú‚ğ“Ç‚İ‚Ş
     LoadMenuSettingsFromFile
 End Sub
 
-' ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼ã‚’ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³ã«è¿½åŠ ã™ã‚‹é–¢æ•°
+' ƒVƒ‡[ƒgƒJƒbƒgƒL[‚ğƒLƒƒƒvƒVƒ‡ƒ“‚É’Ç‰Á‚·‚éŠÖ”
 Function AssignShortcutKey(caption As String) As String
-    ' ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼ã‚’å‰²ã‚Šå½“ã¦ã‚‹
+    ' ƒVƒ‡[ƒgƒJƒbƒgƒL[‚ğŠ„‚è“–‚Ä‚é
     If currentShortcutKeyIndex <= UBound(shortcutKeysList) Then
-        ' ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼ã‚’è¿½åŠ 
+        ' ƒVƒ‡[ƒgƒJƒbƒgƒL[‚ğ’Ç‰Á
         AssignShortcutKey = caption & "(&" & shortcutKeysList(currentShortcutKeyIndex) & ")"
-        ' ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å¢—ã‚„ã™
+        ' ƒCƒ“ƒfƒbƒNƒX‚ğ‘‚â‚·
         currentShortcutKeyIndex = currentShortcutKeyIndex + 1
     Else
-        ' ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼ãŒè¶³ã‚Šãªã„å ´åˆã¯ãã®ã¾ã¾è¿”ã™
+        ' ƒVƒ‡[ƒgƒJƒbƒgƒL[‚ª‘«‚è‚È‚¢ê‡‚Í‚»‚Ì‚Ü‚Ü•Ô‚·
         AssignShortcutKey = caption
     End If
 End Function
 
-' ãƒã‚¯ãƒ­åã‹ã‚‰è¡¨ç¤ºç”¨ã®åå‰ã‚’å–å¾—ã™ã‚‹é–¢æ•°
+' ƒ}ƒNƒ–¼‚©‚ç•\¦—p‚Ì–¼‘O‚ğæ“¾‚·‚éŠÖ”
 Function GetDisplayName(macroName As String) As String
-    ' ãƒã‚¯ãƒ­åã®æœ«å°¾ã«_EUMãŒã‚ã‚‹å ´åˆã¯çœã
+    ' ƒ}ƒNƒ–¼‚Ì––”ö‚É_EUM‚ª‚ ‚éê‡‚ÍÈ‚­
     If Right(macroName, Len(EUM_SUFFIX)) = EUM_SUFFIX Then
         GetDisplayName = Left(macroName, Len(macroName) - Len(EUM_SUFFIX))
     Else
@@ -83,7 +83,7 @@ Function GetDisplayName(macroName As String) As String
     End If
 End Function
 
-' è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼è¨­å®šã‚’èª­ã¿è¾¼ã‚€
+' İ’èƒtƒ@ƒCƒ‹‚©‚çƒƒjƒ…[İ’è‚ğ“Ç‚İ‚Ş
 Sub LoadMenuSettingsFromFile()
     Dim fso As Object
     Dim textFile As Object
@@ -91,36 +91,36 @@ Sub LoadMenuSettingsFromFile()
     Dim textLine As String
     Dim currentSection As String
     
-    ' ãƒ•ã‚¡ã‚¤ãƒ«ã‚·ã‚¹ãƒ†ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
+    ' ƒtƒ@ƒCƒ‹ƒVƒXƒeƒ€ƒIƒuƒWƒFƒNƒg‚Ìì¬
     Set fso = CreateObject("Scripting.FileSystemObject")
     
-    ' ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®è¨­å®š
+    ' ƒtƒ@ƒCƒ‹ƒpƒX‚Ìİ’è
     filePath = ThisWorkbook.Path & "\" & SETTINGS_FILE_PATH
     
-    ' ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤ºã—ã¦çµ‚äº†
+    ' ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍƒGƒ‰[ƒƒbƒZ[ƒW‚ğ•\¦‚µ‚ÄI—¹
     If Not fso.FileExists(filePath) Then
-        MsgBox "è¨­å®šãƒ•ã‚¡ã‚¤ãƒ« " & SETTINGS_FILE_PATH & " ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚", vbExclamation
+        MsgBox "İ’èƒtƒ@ƒCƒ‹ " & SETTINGS_FILE_PATH & " ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB", vbExclamation
         Exit Sub
     End If
     
-    ' ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
+    ' ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ğŠJ‚­
     Set textFile = fso.OpenTextFile(filePath, 1)
     
-    ' ãƒ•ã‚¡ã‚¤ãƒ«ã®çµ‚ã‚ã‚Šã¾ã§1è¡Œãšã¤èª­ã¿è¾¼ã‚€
+    ' ƒtƒ@ƒCƒ‹‚ÌI‚í‚è‚Ü‚Å1s‚¸‚Â“Ç‚İ‚Ş
     currentSection = ""
     
     Do Until textFile.AtEndOfStream
         textLine = Trim(textFile.ReadLine)
         
-        ' ç©ºè¡Œã¯ã‚¹ã‚­ãƒƒãƒ—
+        ' ‹ós‚ÍƒXƒLƒbƒv
         If textLine = "" Then
-            ' ä½•ã‚‚ã—ãªã„
-        ' ã‚»ã‚¯ã‚·ãƒ§ãƒ³åã®è¡Œã®å ´åˆ
+            ' ‰½‚à‚µ‚È‚¢
+        ' ƒZƒNƒVƒ‡ƒ“–¼‚Ìs‚Ìê‡
         ElseIf Left(textLine, 1) = "[" And Right(textLine, 1) = "]" Then
             currentSection = textLine
-        ' ãƒã‚¯ãƒ­åã®è¡Œã®å ´åˆ
+        ' ƒ}ƒNƒ–¼‚Ìs‚Ìê‡
         Else
-            ' ç¾åœ¨ã®ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«åŸºã¥ã„ã¦ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã«è¿½åŠ 
+            ' Œ»İ‚ÌƒZƒNƒVƒ‡ƒ“‚ÉŠî‚Ã‚¢‚ÄƒRƒŒƒNƒVƒ‡ƒ“‚É’Ç‰Á
             Select Case currentSection
                 Case SECTION_INDIVIDUAL_BUTTONS
                     individualButtons.Add textLine
@@ -134,54 +134,54 @@ Sub LoadMenuSettingsFromFile()
         End If
     Loop
     
-    ' ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
+    ' ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
     textFile.Close
     
-    ' ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è§£æ”¾
+    ' ƒIƒuƒWƒFƒNƒg‚Ì‰ğ•ú
     Set textFile = Nothing
     Set fso = Nothing
 End Sub
 
-' ã‚«ã‚¹ã‚¿ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®å‰Šé™¤
+' ƒJƒXƒ^ƒ€ƒƒjƒ…[‚Ìíœ
 Sub RemoveCustomControlsMenu()
     On Error Resume Next
     Application.CommandBars(CUSTOM_MENU_NAME).Delete
     On Error GoTo 0
-    MsgBox "ã‚«ã‚¹ã‚¿ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’å‰Šé™¤ã—ã¾ã—ãŸã€‚", vbInformation
+    MsgBox "ƒJƒXƒ^ƒ€ƒƒjƒ…[‚ğíœ‚µ‚Ü‚µ‚½B", vbInformation
 End Sub
 
-' å‹•çš„ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ç”Ÿæˆ
+' “®“Iƒƒjƒ…[‚Ì¶¬
 Sub GenerateDynamicMenu()
     InitializeModule
     
-    ' æ—¢å­˜ã®ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãŒã‚ã‚Œã°å‰Šé™¤
+    ' Šù‘¶‚Ìƒƒjƒ…[‚ª‚ ‚ê‚Îíœ
     On Error Resume Next
     Application.CommandBars(CUSTOM_MENU_NAME).Delete
     On Error GoTo 0
     
-    ' æ–°ã—ã„ã‚³ãƒãƒ³ãƒ‰ãƒãƒ¼ã®ä½œæˆ
+    ' V‚µ‚¢ƒRƒ}ƒ“ƒhƒo[‚Ìì¬
     Dim customBar As CommandBar
     Set customBar = Application.CommandBars.Add(Name:=CUSTOM_MENU_NAME, Position:=msoBarTop, Temporary:=True)
     
-    ' å€‹åˆ¥ãƒœã‚¿ãƒ³ã®è¿½åŠ 
+    ' ŒÂ•Êƒ{ƒ^ƒ“‚Ì’Ç‰Á
     AddIndividualButtons customBar
     
-    ' ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ãƒªã‚¹ãƒˆã®è¿½åŠ 
+    ' ƒhƒƒbƒvƒ_ƒEƒ“ƒŠƒXƒg‚Ì’Ç‰Á
     AddDropdownList customBar, "1", dropdownList1
     AddDropdownList customBar, "2", dropdownList2
     AddDropdownList customBar, "3", dropdownList3
     
-    ' ã‚³ãƒãƒ³ãƒ‰ãƒãƒ¼ã‚’è¡¨ç¤º
+    ' ƒRƒ}ƒ“ƒhƒo[‚ğ•\¦
     customBar.Visible = True
 End Sub
 
-' å€‹åˆ¥ãƒœã‚¿ãƒ³ã‚’è¿½åŠ ã™ã‚‹
+' ŒÂ•Êƒ{ƒ^ƒ“‚ğ’Ç‰Á‚·‚é
 Private Sub AddIndividualButtons(bar As CommandBar)
     Dim i As Integer
     Dim btn As CommandBarButton
     Dim macroName As String
     
-    ' å€‹åˆ¥ãƒœã‚¿ãƒ³ã®è¿½åŠ 
+    ' ŒÂ•Êƒ{ƒ^ƒ“‚Ì’Ç‰Á
     For i = 1 To individualButtons.Count
         Set btn = bar.Controls.Add(Type:=msoControlButton)
         
@@ -189,32 +189,32 @@ Private Sub AddIndividualButtons(bar As CommandBar)
         
         With btn
             .Style = msoButtonIconAndCaption
-            ' ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼ã‚’å‰²ã‚Šå½“ã¦ã‚‹ï¼ˆè¡¨ç¤ºåã¯_EUMã‚’çœãï¼‰
+            ' ƒVƒ‡[ƒgƒJƒbƒgƒL[‚ğŠ„‚è“–‚Ä‚éi•\¦–¼‚Í_EUM‚ğÈ‚­j
             .Caption = AssignShortcutKey(GetDisplayName(macroName))
             ' .Picture = LoadPicture(ThisWorkbook.Path & "\vba-files\Module\Icons\" & macroName & ".ico")
             .OnAction = macroName
-            ' å¤§ãã‚ã®ãƒœã‚¿ãƒ³ã«ã™ã‚‹
+            ' ‘å‚«‚ß‚Ìƒ{ƒ^ƒ“‚É‚·‚é
             .Height = 40
             .Width = 100
-            ' æ¨™æº–ã‚¢ã‚¤ã‚³ãƒ³ã®è¨­å®šï¼ˆå¿…è¦ã«å¿œã˜ã¦èª¿æ•´ï¼‰
-            ' .FaceId = 100 + i ' é€£ç•ªã§ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¨­å®šï¼ˆé©å®œèª¿æ•´ï¼‰
+            ' •W€ƒAƒCƒRƒ“‚Ìİ’èi•K—v‚É‰‚¶‚Ä’²®j
+            ' .FaceId = 100 + i ' ˜A”Ô‚ÅƒAƒCƒRƒ“‚ğİ’èi“K‹X’²®j
             .FaceId = 1
-            .BeginGroup = (i = 1) ' æœ€åˆã®ãƒœã‚¿ãƒ³ã®å‰ã«åŒºåˆ‡ã‚Šç·šã‚’è¿½åŠ 
+            .BeginGroup = (i = 1) ' Å‰‚Ìƒ{ƒ^ƒ“‚Ì‘O‚É‹æØ‚èü‚ğ’Ç‰Á
         End With
     Next i
 End Sub
 
-' ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ãƒªã‚¹ãƒˆã¨ãƒœã‚¿ãƒ³ã‚’è¿½åŠ ã™ã‚‹
+' ƒhƒƒbƒvƒ_ƒEƒ“ƒŠƒXƒg‚Æƒ{ƒ^ƒ“‚ğ’Ç‰Á‚·‚é
 Private Sub AddDropdownList(bar As CommandBar, caption As String, menuItems As Collection)
-    ' ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ä½œæˆ
+    ' ƒhƒƒbƒvƒ_ƒEƒ“ƒRƒ“ƒgƒ[ƒ‹‚Ìì¬
     Dim ctrl As CommandBarComboBox
     Set ctrl = bar.Controls.Add(Type:=msoControlDropdown)
     
-    ' ä¸€æ„ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«IDã‚’ç”Ÿæˆ
+    ' ˆêˆÓ‚ÌƒRƒ“ƒgƒ[ƒ‹ID‚ğ¶¬
     Dim controlId As String
     controlId = GetUniqueControlId()
     
-    ' å¯¾å¿œã™ã‚‹ãƒãƒƒãƒ”ãƒ³ã‚°ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªã‚’é¸æŠ
+    ' ‘Î‰‚·‚éƒ}ƒbƒsƒ“ƒOƒfƒBƒNƒVƒ‡ƒiƒŠ‚ğ‘I‘ğ
     Dim currentMap As Object
     Select Case caption
         Case "1"
@@ -227,53 +227,53 @@ Private Sub AddDropdownList(bar As CommandBar, caption As String, menuItems As C
             Set currentMap = displayToMacroMap
     End Select
     
-    ' ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³ã¨ãƒãƒƒãƒ—æƒ…å ±ã‚’ã‚¿ã‚°ã«æ ¼ç´ï¼ˆJSONã®ã‚ˆã†ãªå½¢å¼ã§ï¼‰
+    ' ƒLƒƒƒvƒVƒ‡ƒ“‚Æƒ}ƒbƒvî•ñ‚ğƒ^ƒO‚ÉŠi”[iJSON‚Ì‚æ‚¤‚ÈŒ`®‚Åj
     Dim mapTag As String
     mapTag = caption & ":" & controlId
     
     With ctrl
-        ' ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼ã‚’å‰²ã‚Šå½“ã¦ã‚‹
+        ' ƒVƒ‡[ƒgƒJƒbƒgƒL[‚ğŠ„‚è“–‚Ä‚é
         .Caption = AssignShortcutKey(caption)
         
-        ' ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã‹ã‚‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ã‚’è¿½åŠ 
+        ' ƒRƒŒƒNƒVƒ‡ƒ“‚©‚çƒƒjƒ…[€–Ú‚ğ’Ç‰Á
         Dim i As Integer
         Dim macroName As String
         Dim displayName As String
         
-        ' ãƒãƒƒãƒ—ã®ã‚¯ãƒªã‚¢ï¼ˆå„ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ç”¨ã®ãƒãƒƒãƒ—ã‚’ã‚¯ãƒªã‚¢ï¼‰
+        ' ƒ}ƒbƒv‚ÌƒNƒŠƒAiŠeƒhƒƒbƒvƒ_ƒEƒ“—p‚Ìƒ}ƒbƒv‚ğƒNƒŠƒAj
         currentMap.RemoveAll
         
         For i = 1 To menuItems.Count
             macroName = menuItems(i)
             displayName = GetDisplayName(macroName)
             
-            ' è¡¨ç¤ºåã¨å®Ÿéš›ã®ãƒã‚¯ãƒ­åã®ãƒãƒƒãƒ”ãƒ³ã‚°ã‚’ä¿å­˜
+            ' •\¦–¼‚ÆÀÛ‚Ìƒ}ƒNƒ–¼‚Ìƒ}ƒbƒsƒ“ƒO‚ğ•Û‘¶
             currentMap(displayName) = macroName
             
-            ' ã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒãƒƒãƒ—ã«ã‚‚è¿½åŠ ï¼ˆå¾Œæ–¹äº’æ›æ€§ã®ãŸã‚ï¼‰
+            ' ƒOƒ[ƒoƒ‹ƒ}ƒbƒv‚É‚à’Ç‰ÁiŒã•ûŒİŠ·«‚Ì‚½‚ßj
             displayToMacroMap(displayName) = macroName
             
-            ' è¡¨ç¤ºåã®ã¿ã‚’è¿½åŠ 
+            ' •\¦–¼‚Ì‚İ‚ğ’Ç‰Á
             .AddItem displayName
         Next i
         
-        .Width = 200  ' ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ã®å¹…ã‚’è¨­å®š
+        .Width = 200  ' ƒhƒƒbƒvƒ_ƒEƒ“‚Ì•‚ğİ’è
         .Tag = mapTag
-        .BeginGroup = True  ' å‰ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã¨ã®é–“ã«åŒºåˆ‡ã‚Šç·šã‚’è¿½åŠ 
+        .BeginGroup = True  ' ‘O‚ÌƒRƒ“ƒgƒ[ƒ‹‚Æ‚ÌŠÔ‚É‹æØ‚èü‚ğ’Ç‰Á
         
-        ' åˆæœŸé¸æŠã‚’è¨­å®š
+        ' ‰Šú‘I‘ğ‚ğİ’è
         If .ListCount > 0 Then
-            .ListIndex = 1  ' ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§æœ€åˆã®é …ç›®ã‚’é¸æŠ
+            .ListIndex = 1  ' ƒfƒtƒHƒ‹ƒg‚ÅÅ‰‚Ì€–Ú‚ğ‘I‘ğ
         End If
     End With
     
-    ' å®Ÿè¡Œãƒœã‚¿ãƒ³ã®ä½œæˆ
+    ' Àsƒ{ƒ^ƒ“‚Ìì¬
     Dim btn As CommandBarButton
     Set btn = bar.Controls.Add(Type:=msoControlButton)
 
     With btn
         .Style = msoButtonIconAndCaption
-        ' ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼ã‚’å‰²ã‚Šå½“ã¦ã‚‹
+        ' ƒVƒ‡[ƒgƒJƒbƒgƒL[‚ğŠ„‚è“–‚Ä‚é
         .Caption = AssignShortcutKey(" ")
         .OnAction = "ExecuteSelectedMacro"
         .FaceId = 156
@@ -281,7 +281,7 @@ Private Sub AddDropdownList(bar As CommandBar, caption As String, menuItems As C
     End With
 End Sub
 
-' é¸æŠã•ã‚ŒãŸãƒã‚¯ãƒ­ã‚’å®Ÿè¡Œã™ã‚‹
+' ‘I‘ğ‚³‚ê‚½ƒ}ƒNƒ‚ğÀs‚·‚é
 Sub ExecuteSelectedMacro()
     Dim btn As CommandBarControl
     Set btn = Application.CommandBars.ActionControl
@@ -291,17 +291,17 @@ Sub ExecuteSelectedMacro()
     
     If Not ctrl Is Nothing Then
         If ctrl.Text <> "" Then
-            ' ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ãƒªã‚¹ãƒˆã®é¸æŠé …ç›®ã®ãƒ†ã‚­ã‚¹ãƒˆï¼ˆè¡¨ç¤ºåï¼‰ã‚’å–å¾—
+            ' ƒhƒƒbƒvƒ_ƒEƒ“ƒŠƒXƒg‚Ì‘I‘ğ€–Ú‚ÌƒeƒLƒXƒgi•\¦–¼j‚ğæ“¾
             Dim displayName As String
             displayName = ctrl.Text
             
-            ' ã‚¿ã‚°ã‹ã‚‰ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ç•ªå·ã‚’å–å¾—
+            ' ƒ^ƒO‚©‚çƒhƒƒbƒvƒ_ƒEƒ“”Ô†‚ğæ“¾
             Dim dropdownNumber As String
             Dim tagParts As Variant
             tagParts = Split(ctrl.Tag, ":")
             dropdownNumber = tagParts(0)
             
-            ' å¯¾å¿œã™ã‚‹ãƒã‚¯ãƒ­åã‚’å–å¾—ï¼ˆãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ç•ªå·ã«å¿œã˜ãŸãƒãƒƒãƒ—ã‚’ä½¿ç”¨ï¼‰
+            ' ‘Î‰‚·‚éƒ}ƒNƒ–¼‚ğæ“¾iƒhƒƒbƒvƒ_ƒEƒ“”Ô†‚É‰‚¶‚½ƒ}ƒbƒv‚ğg—pj
             Dim macroName As String
             Dim currentMap As Object
             
@@ -320,47 +320,47 @@ Sub ExecuteSelectedMacro()
                 macroName = currentMap(displayName)
                 Application.Run macroName
             Else
-                ' ãƒãƒƒãƒ”ãƒ³ã‚°ãŒãªã„å ´åˆã¯è¡¨ç¤ºåã‚’ãã®ã¾ã¾ä½¿ç”¨ï¼ˆå¾Œæ–¹äº’æ›æ€§ï¼‰
+                ' ƒ}ƒbƒsƒ“ƒO‚ª‚È‚¢ê‡‚Í•\¦–¼‚ğ‚»‚Ì‚Ü‚Üg—piŒã•ûŒİŠ·«j
                 Application.Run displayName
             End If
         Else
-            MsgBox "ãƒã‚¯ãƒ­ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", vbExclamation
+            MsgBox "ƒ}ƒNƒ‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB", vbExclamation
         End If
     Else
-        MsgBox "å¯¾å¿œã™ã‚‹ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚", vbExclamation
+        MsgBox "‘Î‰‚·‚éƒRƒ“ƒgƒ[ƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB", vbExclamation
     End If
 End Sub
 
-' ã‚¿ã‚°ã‹ã‚‰ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’å–å¾—ã™ã‚‹
+' ƒ^ƒO‚©‚çƒRƒ“ƒgƒ[ƒ‹‚ğæ“¾‚·‚é
 Function GetControlFromTag(bar As CommandBar, tagValue As String) As CommandBarComboBox
     Dim ctrl As CommandBarControl
     
-    ' ã‚¿ã‚°ã‹ã‚‰ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«IDã‚’æŠ½å‡ºï¼ˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ: "ç•ªå·:ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ID"ï¼‰
+    ' ƒ^ƒO‚©‚çƒRƒ“ƒgƒ[ƒ‹ID‚ğ’ŠoiƒtƒH[ƒ}ƒbƒg: "”Ô†:ƒRƒ“ƒgƒ[ƒ‹ID"j
     Dim controlId As String
     Dim tagParts As Variant
     
-    ' ã‚¿ã‚°ã‚’åˆ†è§£
+    ' ƒ^ƒO‚ğ•ª‰ğ
     tagParts = Split(tagValue, ":")
     If UBound(tagParts) < 1 Then
-        ' æ—§å½¢å¼ã®ã‚¿ã‚°ã®å ´åˆã¯äº’æ›æ€§ã®ãŸã‚ã«å‡¦ç†
+        ' ‹ŒŒ`®‚Ìƒ^ƒO‚Ìê‡‚ÍŒİŠ·«‚Ì‚½‚ß‚Éˆ—
         controlId = tagValue
     Else
         controlId = tagParts(1)
     End If
     
-    ' ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«IDãŒä¸€è‡´ã™ã‚‹ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’æ¤œç´¢
+    ' ƒRƒ“ƒgƒ[ƒ‹ID‚ªˆê’v‚·‚éƒRƒ“ƒgƒ[ƒ‹‚ğŒŸõ
     For Each ctrl In bar.Controls
         If ctrl.Tag <> "" Then
             Dim ctrlTagParts As Variant
             ctrlTagParts = Split(ctrl.Tag, ":")
             
-            ' æ–°å½¢å¼ã®ã‚¿ã‚°ã®å ´åˆ
+            ' VŒ`®‚Ìƒ^ƒO‚Ìê‡
             If UBound(ctrlTagParts) >= 1 Then
                 If ctrlTagParts(1) = controlId And TypeOf ctrl Is CommandBarComboBox Then
                     Set GetControlFromTag = ctrl
                     Exit Function
                 End If
-            ' æ—§å½¢å¼ã®ã‚¿ã‚°ã®å ´åˆï¼ˆäº’æ›æ€§ã®ãŸã‚ï¼‰
+            ' ‹ŒŒ`®‚Ìƒ^ƒO‚Ìê‡iŒİŠ·«‚Ì‚½‚ßj
             ElseIf ctrl.Tag = controlId And TypeOf ctrl Is CommandBarComboBox Then
                 Set GetControlFromTag = ctrl
                 Exit Function
@@ -371,13 +371,13 @@ Function GetControlFromTag(bar As CommandBar, tagValue As String) As CommandBarC
     Set GetControlFromTag = Nothing
 End Function
 
-' ä¸€æ„ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«IDã‚’ç”Ÿæˆã™ã‚‹
+' ˆêˆÓ‚ÌƒRƒ“ƒgƒ[ƒ‹ID‚ğ¶¬‚·‚é
 Private Function GetUniqueControlId() As String
     controlIdCounter = controlIdCounter + 1
     GetUniqueControlId = "Ctrl_" & controlIdCounter
 End Function
 
-' å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹
+' ‘ÎÛƒ‚ƒWƒ…[ƒ‹‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é
 Function IsTargetModule(moduleName As String) As Boolean
     Dim i As Integer
     For i = LBound(TargetModules) To UBound(TargetModules)

@@ -18,34 +18,34 @@ Attribute VB_Exposed = False
 Option Explicit
 
 ' ===================================================
-' ãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥V2 - ãƒ•ã‚©ãƒ¼ãƒ 
+' ƒg[ƒXƒg’Ê’mV2 - ƒtƒH[ƒ€
 ' ===================================================
-' ä½œæˆæ—¥: 2025/04/25
-' ä½œæˆè€…: Claude
-' æ¦‚è¦: æ”¹è‰¯ç‰ˆãƒˆãƒ¼ã‚¹ãƒˆé€šçŸ¥ç”¨ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ•ã‚©ãƒ¼ãƒ 
-' æ©Ÿèƒ½:
-'   - æ»‘ã‚‰ã‹ãªã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³è¡¨ç¤º/éè¡¨ç¤º
-'   - ç¨®é¡åˆ¥ã®è‰²åˆ†ã‘ï¼ˆæƒ…å ±/æˆåŠŸ/è­¦å‘Š/ã‚¨ãƒ©ãƒ¼ï¼‰
-'   - ã‚¢ã‚¤ã‚³ãƒ³è¡¨ç¤ºå¯¾å¿œ
-'   - ã‚¯ãƒªãƒƒã‚¯ã¾ãŸã¯ã‚­ãƒ¼å…¥åŠ›ã§é–‰ã˜ã‚‹æ©Ÿèƒ½
-' ===================================================
-
-' ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆå¤‰æ•°
-Private m_Message As String     ' è¡¨ç¤ºã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
-Private m_ToastType As String   ' é€šçŸ¥ã®ç¨®é¡ï¼ˆ"info", "success", "warning", "error"ï¼‰
-Private m_Duration As Integer   ' è¡¨ç¤ºæ™‚é–“ï¼ˆãƒŸãƒªç§’ï¼‰
-Private m_IconType As String    ' ã‚¢ã‚¤ã‚³ãƒ³ã‚¿ã‚¤ãƒ—
-Private m_AnimationActive As Boolean ' ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é€²è¡Œä¸­ãƒ•ãƒ©ã‚°
-
-' ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é–¢é€£å®šæ•°
-Private Const ANIM_STEP_COUNT As Integer = 20   ' ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ã‚¹ãƒ†ãƒƒãƒ—æ•°
-Private Const ANIM_STEP_DELAY As Integer = 15   ' ã‚¹ãƒ†ãƒƒãƒ—é–“ã®é…å»¶ï¼ˆãƒŸãƒªç§’ï¼‰
-
-' ===================================================
-' ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+' ì¬“ú: 2025/04/25
+' ì¬Ò: Claude
+' ŠT—v: ‰ü—Ç”Åƒg[ƒXƒg’Ê’m—p‚Ìƒ†[ƒU[ƒtƒH[ƒ€
+' ‹@”\:
+'   - ŠŠ‚ç‚©‚ÈƒAƒjƒ[ƒVƒ‡ƒ“•\¦/”ñ•\¦
+'   - í—Ş•Ê‚ÌF•ª‚¯iî•ñ/¬Œ÷/Œx/ƒGƒ‰[j
+'   - ƒAƒCƒRƒ“•\¦‘Î‰
+'   - ƒNƒŠƒbƒN‚Ü‚½‚ÍƒL[“ü—Í‚Å•Â‚¶‚é‹@”\
 ' ===================================================
 
-' ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+' ƒvƒ‰ƒCƒx[ƒg•Ï”
+Private m_Message As String     ' •\¦‚·‚éƒƒbƒZ[ƒW
+Private m_ToastType As String   ' ’Ê’m‚Ìí—Şi"info", "success", "warning", "error"j
+Private m_Duration As Integer   ' •\¦ŠÔiƒ~ƒŠ•bj
+Private m_IconType As String    ' ƒAƒCƒRƒ“ƒ^ƒCƒv
+Private m_AnimationActive As Boolean ' ƒAƒjƒ[ƒVƒ‡ƒ“is’†ƒtƒ‰ƒO
+
+' ƒAƒjƒ[ƒVƒ‡ƒ“ŠÖ˜A’è”
+Private Const ANIM_STEP_COUNT As Integer = 20   ' ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌƒXƒeƒbƒv”
+Private Const ANIM_STEP_DELAY As Integer = 15   ' ƒXƒeƒbƒvŠÔ‚Ì’x‰„iƒ~ƒŠ•bj
+
+' ===================================================
+' ƒvƒƒpƒeƒB
+' ===================================================
+
+' ƒƒbƒZ[ƒWƒvƒƒpƒeƒB
 Public Property Let Message(value As String)
     m_Message = value
     If Me.Visible Then lblMessage.Caption = m_Message
@@ -55,7 +55,7 @@ Public Property Get Message() As String
     Message = m_Message
 End Property
 
-' ãƒˆãƒ¼ã‚¹ãƒˆç¨®é¡ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+' ƒg[ƒXƒgí—ŞƒvƒƒpƒeƒB
 Public Property Let ToastType(value As String)
     m_ToastType = value
     ApplyToastStyle
@@ -65,7 +65,7 @@ Public Property Get ToastType() As String
     ToastType = m_ToastType
 End Property
 
-' è¡¨ç¤ºæ™‚é–“ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+' •\¦ŠÔƒvƒƒpƒeƒB
 Public Property Let Duration(value As Integer)
     m_Duration = value
 End Property
@@ -74,7 +74,7 @@ Public Property Get Duration() As Integer
     Duration = m_Duration
 End Property
 
-' ã‚¢ã‚¤ã‚³ãƒ³ã‚¿ã‚¤ãƒ—ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+' ƒAƒCƒRƒ“ƒ^ƒCƒvƒvƒƒpƒeƒB
 Public Property Let IconType(value As String)
     m_IconType = value
     ApplyIconStyle
@@ -85,123 +85,123 @@ Public Property Get IconType() As String
 End Property
 
 ' ===================================================
-' ãƒ•ã‚©ãƒ¼ãƒ ã‚¤ãƒ™ãƒ³ãƒˆ
+' ƒtƒH[ƒ€ƒCƒxƒ“ƒg
 ' ===================================================
 
-' ãƒ•ã‚©ãƒ¼ãƒ åˆæœŸåŒ–æ™‚
+' ƒtƒH[ƒ€‰Šú‰»
 Private Sub UserForm_Initialize()
-    ' ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã®è¨­å®š
+    ' ƒfƒtƒHƒ‹ƒg’l‚Ìİ’è
     m_ToastType = "info"
     m_Duration = 2000
     m_AnimationActive = False
     
-    ' ãƒ•ã‚©ãƒ¼ãƒ ã®åˆæœŸè¨­å®š
-    Me.BackColor = RGB(68, 68, 68)  ' ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®èƒŒæ™¯è‰²
+    ' ƒtƒH[ƒ€‚Ì‰Šúİ’è
+    Me.BackColor = RGB(68, 68, 68)  ' ƒfƒtƒHƒ‹ƒg‚Ì”wŒiF
     Me.Width = 250
     Me.Height = 60
     
-    ' è§’ä¸¸è¡¨ç¾ã®ãŸã‚ã®ãƒ•ãƒ¬ãƒ¼ãƒ è¨­å®š
+    ' ŠpŠÛ•\Œ»‚Ì‚½‚ß‚ÌƒtƒŒ[ƒ€İ’è
     Frame1.BackColor = Me.BackColor
     Frame1.BorderStyle = 0
     
-    ' ãƒ©ãƒ™ãƒ«ã®åˆæœŸè¨­å®š
+    ' ƒ‰ƒxƒ‹‚Ì‰Šúİ’è
     lblMessage.BackColor = Me.BackColor
     lblMessage.ForeColor = RGB(255, 255, 255)
     lblIcon.BackColor = Me.BackColor
     lblIcon.ForeColor = RGB(255, 255, 255)
 End Sub
 
-' ãƒ•ã‚©ãƒ¼ãƒ è¡¨ç¤ºæ™‚
+' ƒtƒH[ƒ€•\¦
 Private Sub UserForm_Activate()
-    ' ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è¨­å®š
+    ' ƒƒbƒZ[ƒW‚Ìİ’è
     lblMessage.Caption = m_Message
     
-    ' ã‚¹ã‚¿ã‚¤ãƒ«ã®é©ç”¨
+    ' ƒXƒ^ƒCƒ‹‚Ì“K—p
     ApplyToastStyle
     ApplyIconStyle
     
-    ' ãƒ•ã‚©ãƒ¼ãƒ ã®ä½ç½®è¨­å®š
+    ' ƒtƒH[ƒ€‚ÌˆÊ’uİ’è
     PositionForm
     
-    ' ã‚¹ãƒ©ã‚¤ãƒ‰ã‚¤ãƒ³ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹
+    ' ƒXƒ‰ƒCƒhƒCƒ“ƒAƒjƒ[ƒVƒ‡ƒ“ŠJn
     SlideInAnimation
     
-    ' è¡¨ç¤ºã‚¿ã‚¤ãƒãƒ¼ã®è¨­å®š
+    ' •\¦ƒ^ƒCƒ}[‚Ìİ’è
     Application.OnTime Now + TimeSerial(0, 0, m_Duration / 1000), "ToastManagerVer2.ContinueToastQueue"
 End Sub
 
-' ã‚¯ãƒªãƒƒã‚¯ã§é–‰ã˜ã‚‹
+' ƒNƒŠƒbƒN‚Å•Â‚¶‚é
 Private Sub UserForm_Click()
     CloseToast
 End Sub
 
-' ãƒ©ãƒ™ãƒ«ã‚¯ãƒªãƒƒã‚¯ã§ã‚‚é–‰ã˜ã‚‹
+' ƒ‰ƒxƒ‹ƒNƒŠƒbƒN‚Å‚à•Â‚¶‚é
 Private Sub lblMessage_Click()
     CloseToast
 End Sub
 
-' ã‚¢ã‚¤ã‚³ãƒ³ãƒ©ãƒ™ãƒ«ã‚¯ãƒªãƒƒã‚¯ã§ã‚‚é–‰ã˜ã‚‹
+' ƒAƒCƒRƒ“ƒ‰ƒxƒ‹ƒNƒŠƒbƒN‚Å‚à•Â‚¶‚é
 Private Sub lblIcon_Click()
     CloseToast
 End Sub
 
-' ã‚­ãƒ¼å…¥åŠ›ã§ã‚‚é–‰ã˜ã‚‹
+' ƒL[“ü—Í‚Å‚à•Â‚¶‚é
 Private Sub UserForm_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
     CloseToast
 End Sub
 
 ' ===================================================
-' ãƒ¡ã‚½ãƒƒãƒ‰
+' ƒƒ\ƒbƒh
 ' ===================================================
 
-' ãƒˆãƒ¼ã‚¹ãƒˆç¨®é¡ã«å¿œã˜ãŸã‚¹ã‚¿ã‚¤ãƒ«ã‚’é©ç”¨
+' ƒg[ƒXƒgí—Ş‚É‰‚¶‚½ƒXƒ^ƒCƒ‹‚ğ“K—p
 Private Sub ApplyToastStyle()
     Dim backColor As Long
     
-    ' ãƒˆãƒ¼ã‚¹ãƒˆç¨®é¡ã«å¿œã˜ãŸèƒŒæ™¯è‰²ã®è¨­å®š
+    ' ƒg[ƒXƒgí—Ş‚É‰‚¶‚½”wŒiF‚Ìİ’è
     Select Case LCase(m_ToastType)
         Case "info"
-            backColor = RGB(0, 120, 215)  ' é’ç³»
+            backColor = RGB(0, 120, 215)  ' ÂŒn
         Case "success"
-            backColor = RGB(16, 124, 16)  ' ç·‘ç³»
+            backColor = RGB(16, 124, 16)  ' —ÎŒn
         Case "warning"
-            backColor = RGB(234, 157, 35) ' ã‚ªãƒ¬ãƒ³ã‚¸ç³»
+            backColor = RGB(234, 157, 35) ' ƒIƒŒƒ“ƒWŒn
         Case "error"
-            backColor = RGB(232, 17, 35)  ' èµ¤ç³»
+            backColor = RGB(232, 17, 35)  ' ÔŒn
         Case Else
-            backColor = RGB(68, 68, 68)   ' ã‚°ãƒ¬ãƒ¼ï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼‰
+            backColor = RGB(68, 68, 68)   ' ƒOƒŒ[iƒfƒtƒHƒ‹ƒgj
     End Select
     
-    ' èƒŒæ™¯è‰²ã®é©ç”¨
+    ' ”wŒiF‚Ì“K—p
     Me.BackColor = backColor
     Frame1.BackColor = backColor
     lblMessage.BackColor = backColor
     lblIcon.BackColor = backColor
 End Sub
 
-' ã‚¢ã‚¤ã‚³ãƒ³ç¨®é¡ã«å¿œã˜ãŸã‚¹ã‚¿ã‚¤ãƒ«ã‚’é©ç”¨
+' ƒAƒCƒRƒ“í—Ş‚É‰‚¶‚½ƒXƒ^ƒCƒ‹‚ğ“K—p
 Private Sub ApplyIconStyle()
-    ' ã‚¢ã‚¤ã‚³ãƒ³æ–‡å­—ã®è¨­å®š
-    ' ã“ã“ã§ã¯Unicodeã®è¨˜å·ã‚’ä½¿ç”¨ (PowerPointé¢¨ã®ã‚¢ã‚¤ã‚³ãƒ³)
+    ' ƒAƒCƒRƒ“•¶š‚Ìİ’è
+    ' ‚±‚±‚Å‚ÍUnicode‚Ì‹L†‚ğg—p (PowerPoint•—‚ÌƒAƒCƒRƒ“)
     Select Case LCase(m_IconType)
         Case "info", ""
             lblIcon.Caption = "i"
             lblIcon.Font.Bold = True
         Case "success"
-            lblIcon.Caption = "âœ“"
+            lblIcon.Caption = "?"
         Case "warning"
             lblIcon.Caption = "!"
         Case "error"
-            lblIcon.Caption = "Ã—"
+            lblIcon.Caption = "~"
         Case Else
             lblIcon.Caption = ""
     End Select
 End Sub
 
-' ãƒ•ã‚©ãƒ¼ãƒ ã®ä½ç½®ã‚’è¨­å®š
+' ƒtƒH[ƒ€‚ÌˆÊ’u‚ğİ’è
 Private Sub PositionForm()
-    ' ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ä¸­å¤®ä¸‹éƒ¨ã«è¡¨ç¤º
-    ' Excelã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã§ã¯ãªãã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªExcelã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«å¯¾ã—ã¦ä½ç½®æ±ºã‚
+    ' ƒAƒNƒeƒBƒuƒEƒBƒ“ƒhƒE‚Ì’†‰›‰º•”‚É•\¦
+    ' Excel‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒEƒBƒ“ƒhƒE‚Å‚Í‚È‚­ƒAƒNƒeƒBƒu‚ÈExcelƒEƒBƒ“ƒhƒE‚É‘Î‚µ‚ÄˆÊ’uŒˆ‚ß
     Dim activeWin As Window
     Set activeWin = Application.ActiveWindow
     
@@ -210,18 +210,18 @@ Private Sub PositionForm()
     Dim winWidth As Double
     Dim winHeight As Double
     
-    ' ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ä½ç½®ã¨ã‚µã‚¤ã‚ºã‚’å–å¾—
+    ' ƒAƒNƒeƒBƒuƒEƒBƒ“ƒhƒE‚ÌˆÊ’u‚ÆƒTƒCƒY‚ğæ“¾
     winLeft = activeWin.WindowLeft
     winTop = activeWin.WindowTop
     winWidth = activeWin.Width
     winHeight = activeWin.Height
     
-    ' ãƒ•ã‚©ãƒ¼ãƒ ã®ä½ç½®ã‚’è¨­å®šï¼ˆä¸­å¤®ä¸‹éƒ¨ï¼‰
+    ' ƒtƒH[ƒ€‚ÌˆÊ’u‚ğİ’èi’†‰›‰º•”j
     Me.Left = winLeft + (winWidth / 2) - (Me.Width / 2)
-    Me.Top = winTop + winHeight  ' ç”»é¢ä¸‹ï¼ˆã‚¹ãƒ©ã‚¤ãƒ‰ã‚¤ãƒ³ã®é–‹å§‹ä½ç½®ï¼‰
+    Me.Top = winTop + winHeight  ' ‰æ–Ê‰ºiƒXƒ‰ƒCƒhƒCƒ“‚ÌŠJnˆÊ’uj
 End Sub
 
-' ã‚¹ãƒ©ã‚¤ãƒ‰ã‚¤ãƒ³ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+' ƒXƒ‰ƒCƒhƒCƒ“ƒAƒjƒ[ƒVƒ‡ƒ“
 Private Sub SlideInAnimation()
     m_AnimationActive = True
     
@@ -230,17 +230,17 @@ Private Sub SlideInAnimation()
     Dim endTop As Double
     Dim currentTop As Double
     
-    ' é–‹å§‹ä½ç½®ã¨çµ‚äº†ä½ç½®ã®è¨­å®š
+    ' ŠJnˆÊ’u‚ÆI—¹ˆÊ’u‚Ìİ’è
     startTop = Me.Top
-    endTop = startTop - Me.Height - 10  ' 10ãƒ”ã‚¯ã‚»ãƒ«ä½™è£•ã‚’æŒãŸã›ã‚‹
+    endTop = startTop - Me.Height - 10  ' 10ƒsƒNƒZƒ‹—]—T‚ğ‚½‚¹‚é
     
-    ' ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ«ãƒ¼ãƒ—
+    ' ƒAƒjƒ[ƒVƒ‡ƒ“ƒ‹[ƒv
     For i = 0 To ANIM_STEP_COUNT
-        ' ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°é–¢æ•°ã‚’ä½¿ç”¨ã—ãŸæ»‘ã‚‰ã‹ãªå‹•ã
+        ' ƒC[ƒWƒ“ƒOŠÖ”‚ğg—p‚µ‚½ŠŠ‚ç‚©‚È“®‚«
         currentTop = startTop - (startTop - endTop) * EaseOutCubic(i / ANIM_STEP_COUNT)
         Me.Top = currentTop
         
-        ' ç”»é¢ã®æ›´æ–°ã¨é…å»¶
+        ' ‰æ–Ê‚ÌXV‚Æ’x‰„
         DoEvents
         Sleep ANIM_STEP_DELAY
     Next i
@@ -248,7 +248,7 @@ Private Sub SlideInAnimation()
     m_AnimationActive = False
 End Sub
 
-' ã‚¹ãƒ©ã‚¤ãƒ‰ã‚¢ã‚¦ãƒˆã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+' ƒXƒ‰ƒCƒhƒAƒEƒgƒAƒjƒ[ƒVƒ‡ƒ“
 Private Sub SlideOutAnimation()
     If m_AnimationActive Then Exit Sub
     m_AnimationActive = True
@@ -258,17 +258,17 @@ Private Sub SlideOutAnimation()
     Dim endTop As Double
     Dim currentTop As Double
     
-    ' é–‹å§‹ä½ç½®ã¨çµ‚äº†ä½ç½®ã®è¨­å®š
+    ' ŠJnˆÊ’u‚ÆI—¹ˆÊ’u‚Ìİ’è
     startTop = Me.Top
-    endTop = startTop + Me.Height + 10  ' 10ãƒ”ã‚¯ã‚»ãƒ«ä½™è£•ã‚’æŒãŸã›ã‚‹
+    endTop = startTop + Me.Height + 10  ' 10ƒsƒNƒZƒ‹—]—T‚ğ‚½‚¹‚é
     
-    ' ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ«ãƒ¼ãƒ—
+    ' ƒAƒjƒ[ƒVƒ‡ƒ“ƒ‹[ƒv
     For i = 0 To ANIM_STEP_COUNT
-        ' ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°é–¢æ•°ã‚’ä½¿ç”¨ã—ãŸæ»‘ã‚‰ã‹ãªå‹•ã
+        ' ƒC[ƒWƒ“ƒOŠÖ”‚ğg—p‚µ‚½ŠŠ‚ç‚©‚È“®‚«
         currentTop = startTop + (endTop - startTop) * EaseInCubic(i / ANIM_STEP_COUNT)
         Me.Top = currentTop
         
-        ' ç”»é¢ã®æ›´æ–°ã¨é…å»¶
+        ' ‰æ–Ê‚ÌXV‚Æ’x‰„
         DoEvents
         Sleep ANIM_STEP_DELAY
     Next i
@@ -277,43 +277,43 @@ Private Sub SlideOutAnimation()
     Me.Hide
 End Sub
 
-' ãƒˆãƒ¼ã‚¹ãƒˆã‚’é–‰ã˜ã‚‹
+' ƒg[ƒXƒg‚ğ•Â‚¶‚é
 Private Sub CloseToast()
-    ' ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸­ãªã‚‰ä½•ã‚‚ã—ãªã„
+    ' ƒAƒjƒ[ƒVƒ‡ƒ“’†‚È‚ç‰½‚à‚µ‚È‚¢
     If m_AnimationActive Then Exit Sub
     
-    ' ã‚¿ã‚¤ãƒãƒ¼ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«
+    ' ƒ^ƒCƒ}[‚ğƒLƒƒƒ“ƒZƒ‹
     On Error Resume Next
     Application.OnTime Now + TimeSerial(0, 0, m_Duration / 1000), "ToastManagerVer2.ContinueToastQueue", , False
     On Error GoTo 0
     
-    ' ã‚¹ãƒ©ã‚¤ãƒ‰ã‚¢ã‚¦ãƒˆã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+    ' ƒXƒ‰ƒCƒhƒAƒEƒgƒAƒjƒ[ƒVƒ‡ƒ“
     SlideOutAnimation
     
-    ' ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã«é€šçŸ¥
+    ' ƒ}ƒl[ƒWƒƒ[‚É’Ê’m
     ToastManagerVer2.CloseCurrentToast
 End Sub
 
 ' ===================================================
-' ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°é–¢æ•°
+' ƒC[ƒWƒ“ƒOŠÖ”
 ' ===================================================
 
-' ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã‚¤ãƒ³ï¼ˆåŠ é€Ÿï¼‰
+' ƒC[ƒWƒ“ƒOƒCƒ“i‰Á‘¬j
 Private Function EaseInCubic(t As Double) As Double
     EaseInCubic = t * t * t
 End Function
 
-' ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã‚¢ã‚¦ãƒˆï¼ˆæ¸›é€Ÿï¼‰
+' ƒC[ƒWƒ“ƒOƒAƒEƒgiŒ¸‘¬j
 Private Function EaseOutCubic(t As Double) As Double
     t = t - 1
     EaseOutCubic = t * t * t + 1
 End Function
 
 ' ===================================================
-' ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£é–¢æ•°
+' ƒ†[ƒeƒBƒŠƒeƒBŠÖ”
 ' ===================================================
 
-' ã‚¹ãƒªãƒ¼ãƒ—é–¢æ•°
+' ƒXƒŠ[ƒvŠÖ”
 Private Sub Sleep(milliseconds As Long)
     Dim startTime As Double
     startTime = Timer
